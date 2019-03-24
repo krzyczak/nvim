@@ -1,0 +1,118 @@
+let mapleader="\<Space>"
+set number
+set showmatch
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set ignorecase
+set smartcase
+set termguicolors
+set scrolloff=5
+
+call plug#begin()
+  " File browser side bar plugin
+  " https://github.com/scrooloose/nerdtree
+  Plug 'scrooloose/nerdtree'
+
+  " A nice theme
+  " https://github.com/joshdick/onedark.vim
+  Plug 'joshdick/onedark.vim'
+
+  " Selecting multiple of the same (ctrl + g)
+  " https://github.com/terryma/vim-multiple-cursors
+  Plug 'terryma/vim-multiple-cursors'
+
+  " Surround code and change surrounding chars
+  " https://github.com/tpope/vim-surround"
+  Plug 'tpope/vim-surround'
+
+  " build int git powerhouse
+  " https://github.com/tpope/vim-fugitive
+  Plug 'tpope/vim-fugitive'
+
+  " https://github.com/scrooloose/nerdcommenter
+  " https://github.com/vim-airline/vim-airline
+  Plug 'vim-airline/vim-airline'
+
+  " Fuzzy file search
+  " https://github.com/ctrlpvim/ctrlp.vim
+  Plug 'ctrlpvim/ctrlp.vim'
+
+  " Allows for easy toggling of smart comments
+  " https://github.com/scrooloose/nerdcommenter
+  Plug 'scrooloose/nerdcommenter'
+
+  " Automatically closes ruby block
+  " https://github.com/tpope/vim-endwise
+  Plug 'tpope/vim-endwise'
+
+  " Auto reload the file if modified somewhere else
+  " https://github.com/djoshea/vim-autoread
+  Plug 'djoshea/vim-autoread'
+
+  " Highlights all search results as you type
+  " https://github.com/haya14busa/incsearch.vim
+  Plug 'haya14busa/incsearch.vim'
+
+  " Adds a tonne of rails related keys
+  " https://github.com/tpope/vim-rails
+  Plug 'tpope/vim-rails'
+call plug#end()
+
+" onedark theme settings
+syntax on
+colorscheme onedark
+
+" NERDTree settings
+autocmd StdinReadPre * let s:std_in=1
+" open NERDTree by default if no file supplied to vim
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" open NERDTree if opening vim with a folder
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
+" close vim if nothing but NERDTree is open with q!
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" ctrl + n -- toggles NERDTree
+map <C-\> :NERDTreeToggle<CR>
+map <C-f> :NERDTreeFind<CR>
+
+" vim-multiple-cursors settings
+let g:multi_cursor_start_word_key = '<C-g>'
+let g:multi_cursor_start_key = '<C-g>'
+let g:multi_cursor_next_key = '<C-g>'
+"Cannot yet map ctrl+shift+g to go back. Must investigate."
+"https://stackoverflow.com/questions/1506764/how-to-map-ctrla-and-ctrlshifta-differently"
+"let g:multi_cursor_prev_key = '<C-p>'"
+
+" Remape CtrlP
+let g:ctrlp_map = '<c-o>'
+
+" nerdcommenter settings
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDDefaultAlign = 'left'
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 1
+" let g:NERDToggleCheckAllLines = 1
+
+let g:NERDCreateDefaultMappings = 0
+nnoremap <C-_> :call NERDComment(0,"toggle")<CR>
+vnoremap <C-_> :call NERDComment(0,"toggle")<CR>
+
+" incseach settings
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+" Remaps :A to Ctrl+t to jump between file and spec
+" Functionality provided by tpope/vim-rails
+map <C-t> :A<CR>
+
+" Draw a crey line at the 79 character limit
+let &colorcolumn=join(range(81,999),",")
+let &colorcolumn="79,".join(range(400,999),",")
+
+" remapDCompactSexyComs = 1uo access vim menu quickly
+noremap ; :
+
+" escape clears highlight after search
+map <esc> :noh<cr>
