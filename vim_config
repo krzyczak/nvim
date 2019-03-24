@@ -59,10 +59,6 @@ call plug#begin()
   Plug 'tpope/vim-rails'
 call plug#end()
 
-" onedark theme settings
-syntax on
-colorscheme onedark
-
 " NERDTree settings
 autocmd StdinReadPre * let s:std_in=1
 " open NERDTree by default if no file supplied to vim
@@ -107,9 +103,9 @@ map g/ <Plug>(incsearch-stay)
 " Functionality provided by tpope/vim-rails
 map <C-t> :A<CR>
 
-" Draw a crey line at the 79 character limit
+" Draw a crey line at the 95 character limit
 let &colorcolumn=join(range(81,999),",")
-let &colorcolumn="79,".join(range(400,999),",")
+let &colorcolumn="95,".join(range(400,999),",")
 
 " remapDCompactSexyComs = 1uo access vim menu quickly
 noremap ; :
