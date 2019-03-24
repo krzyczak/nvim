@@ -5,6 +5,13 @@ uninstall () {
   rm -rf ~/.local/share/nvim
   echo "Removing ~/.config/nvim"
   rm -rf ~/.config/nvim
+
+  echo "Removing ~/.vimrc"
+  rm -rf ~/.vimrc
+
+  echo "Removing ~/.vim"
+  rm -rf ~/.vim
+
   echo "Done."
 }
 
@@ -42,32 +49,45 @@ install_deps () {
 }
 
 main () {
-  echo "Installing vim.plug"
-  # Vim:
-  # curl -fsSLo ~/.vim/autoload/plug.vim --create-dirs \
-  #   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  if [[ $1 == "vim" ]]
+  then
+    VIM_CONFIG_PATH="$HOME/.vimrc"
+  fi
 
-  # Neovim:
-  curl -fsSLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  if [[ "$1" == "nvim" ]]
+  then
+    VIM_CONFIG_PATH="$HOME/.config/nvim/init.vim"
+  fi
+
+  echo "Installing vim.plug"
+
+  if [[ "$1" == "vim" ]]
+  then
+    curl -fsSLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  fi
+
+  if [[ "$1" == "nvim" ]]
+  then
+    curl -fsSLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  fi
+
   echo "vim.plug installed successfully."
 
   echo "Creating configuration..."
   # TODO: check if neovinm in installed.
   # If it is then:
   mkdir -p ~/.config/nvim
-  curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/vim_config > ~/.config/nvim/init.vim
-  #
-  # If neovim is not installed but vim is installed:
-  # curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/vim_config > ~/.vimrc
 
-  # echo "Installing plugins..."
-  nvim +"PlugInstall --sync" +qa
-  # nvim --cmd "PlugInstall --sync" --cmd qa
+  curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/vim_config > $VIM_CONFIG_PATH
 
-  echo "" >> ~/.config/nvim/init.vim
-  echo "syntax on" >> ~/.config/nvim/init.vim
-  echo "colorscheme onedark" >> ~/.config/nvim/init.vim
+  echo "Installing plugins..."
+  $1 +"PlugInstall --sync" +qa
+
+  echo "" >> $VIM_CONFIG_PATH
+  echo "syntax on" >> $VIM_CONFIG_PATH
+  echo "colorscheme onedark" >> $VIM_CONFIG_PATH
   echo "Configuration finished"
 }
 
@@ -87,4 +107,9 @@ then
   install_deps "neovim"
 fi
 
-main
+if [[ "$0" == "nvim" ]] || [[ "$1" == "nvim" ]]
+then
+  main "nvim"
+else
+  main "vim"
+fi

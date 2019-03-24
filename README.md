@@ -1,4 +1,4 @@
 # Installation
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/install.sh)" [uninstall|vim|nvim]
 ```
