@@ -2,15 +2,18 @@
 
 uninstall () {
   echo "Removing ~/.local/share/nvim"
-  rm -rf ~/.local/share/nvim
+  rm -rf $HOME/.local/share/nvim
   echo "Removing ~/.config/nvim"
-  rm -rf ~/.config/nvim
+  rm -rf $HOME/.config/nvim
 
   echo "Removing ~/.vimrc"
-  rm -rf ~/.vimrc
+  rm -rf $HOME/.vimrc
 
   echo "Removing ~/.vim"
-  rm -rf ~/.vim
+  rm -rf $HOME/.vim
+
+  echo "Removing ~/.bin/nvim"
+  rm -rf $HOME/.bin/nvim
 
   echo "Done."
 }
@@ -61,14 +64,21 @@ install_deps () {
   # esac
 
   if [[ "$(uname)" == "Linux" ]]; then
-    if [[ "$1" == "nvim" ]]; then
-      sudo apt-get install -y software-properties-common
-      sudo add-apt-repository -y ppa:nvim-ppa/stable
+    if [[ "$1" == "neovim" ]]; then
+      # sudo apt-get install -y software-properties-common
+      # sudo add-apt-repository -y ppa:nvim-ppa/stable
+      curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage --create-dirs -o $HOME/.bin/nvim
+      export PATH=$PATH:$HOME/.bin
+      echo "" >> $HOME/.bashrc
+      echo "export PATH=$PATH:$HOME/.bin" >> $HOME/.bashrc
+      echo "" >> $HOME/.bashrc
+      chmod +x $HOME/.bin/nvim
     else
       sudo add-apt-repository -y ppa:jonathonf/vim
+      sudo apt-get -y update
+      # sudo apt-get install -y $1
+      sudo apt-get install -y vim
     fi
-    sudo apt-get -y update
-    sudo apt-get install -y $1
   fi
 
   if [[ "$(uname)" == "Darwin" ]]; then
@@ -104,5 +114,5 @@ if [[ "$2" == "--with-deps" ]]; then
   install_deps $SOFTWARE_NAME
 fi
 
-echo "Installing $EDITOR"
+echo "Configuring for $EDITOR"
 install $EDITOR
