@@ -43,29 +43,6 @@ install () {
   echo "Configuration finished"
 }
 
-# if [[ "$0" == "uninstall" ]] || [[ "$1" == "uninstall" ]]
-# then
-#   uninstall
-#   exit 0
-# fi
-
-# if [[ "$0" == "vim" ]] || [[ "$1" == "vim" ]]
-# then
-#   install_deps "vim"
-# fi
-
-# if [[ "$0" == "nvim" ]] || [[ "$1" == "nvim" ]]
-# then
-#   install_deps "nvim"
-# fi
-
-# if [[ "$0" == "nvim" ]] || [[ "$1" == "nvim" ]]
-# then
-#   main "nvim"
-# else
-#   main "vim"
-# fi
-
 install_deps () {
   echo "Installing $1..."
 
@@ -123,4 +100,5 @@ if [[ "$2" == "--with-deps" ]]; then
   install_deps $SOFTWARE_NAME
 fi
 
+echo "Installing $EDITOR"
 install $EDITOR
