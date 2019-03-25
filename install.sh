@@ -61,6 +61,7 @@ install_deps () {
   # esac
 
   if [[ "$(uname)" == "Linux" ]]; then
+    sudo add-apt-repository -y ppa:jonathonf/vim
     sudo apt-get install -y software-properties-common
     sudo add-apt-repository -y ppa:nvim-ppa/stable
     sudo apt-get -y update
