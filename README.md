@@ -1,17 +1,23 @@
 # Running options
-### Install with NeoVim
+### Instalation
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/install.sh)" nvim
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/install.sh)" install [vim|nvim] [--with-deps]
 ```
 
-### Install with Vim
+or
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/install.sh)" vim
+./install.sh [vim|nvim] [--with-deps]
 ```
 
 ### Uninstall
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/install.sh)" uninstall
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/install.sh)" - uninstall
+```
+
+or
+
+```bash
+./install.sh uninstall
 ```
