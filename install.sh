@@ -15,6 +15,57 @@ uninstall () {
   echo "Done."
 }
 
+install () {
+  if [[ $1 == "vim" ]]; then
+    CONFIG_PATH="$HOME/.vimrc"
+    PLUG_PATH="$HOME/.vim/autoload/plug.vim"
+  fi
+
+  if [[ "$1" == "nvim" ]]; then
+    mkdir -p $HOME/.config/nvim
+    CONFIG_PATH="$HOME/.config/nvim/init.vim"
+    PLUG_PATH="$HOME/.local/share/nvim/site/autoload/plug.vim"
+  fi
+
+  echo "Installing vim.plug"
+  curl -fsSLo $PLUG_PATH --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  echo "vim.plug installed successfully."
+
+  echo "Creating configuration..."
+  curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/vim_config > $CONFIG_PATH
+
+  echo "Installing plugins..."
+  $1 +"PlugInstall --sync" +qa
+
+  echo "" >> $CONFIG_PATH
+  echo "syntax on" >> $CONFIG_PATH
+  echo "colorscheme onedark" >> $CONFIG_PATH
+  echo "Configuration finished"
+}
+
+# if [[ "$0" == "uninstall" ]] || [[ "$1" == "uninstall" ]]
+# then
+#   uninstall
+#   exit 0
+# fi
+
+# if [[ "$0" == "vim" ]] || [[ "$1" == "vim" ]]
+# then
+#   install_deps "vim"
+# fi
+
+# if [[ "$0" == "nvim" ]] || [[ "$1" == "nvim" ]]
+# then
+#   install_deps "nvim"
+# fi
+
+# if [[ "$0" == "nvim" ]] || [[ "$1" == "nvim" ]]
+# then
+#   main "nvim"
+# else
+#   main "vim"
+# fi
+
 install_deps () {
   echo "Installing $1..."
 
@@ -32,84 +83,44 @@ install_deps () {
   #   linux*)   EXECUTOR="sudo apt-get";;
   # esac
 
-  if [[ "$(uname)" == "Linux" ]]
-  then
+  if [[ "$(uname)" == "Linux" ]]; then
     sudo apt-get install -y software-properties-common
-    sudo add-apt-repository -y ppa:neovim-ppa/stable
+    sudo add-apt-repository -y ppa:nvim-ppa/stable
     sudo apt-get -y update
     sudo apt-get install -y $1
   fi
 
-  if [[ "$(uname)" == "Darwin" ]]
-  then
+  if [[ "$(uname)" == "Darwin" ]]; then
     brew install $1
   fi
 
   echo "$1 installed successfully."
 }
 
-main () {
-  if [[ $1 == "vim" ]]
-  then
-    VIM_CONFIG_PATH="$HOME/.vimrc"
-  fi
-
-  if [[ "$1" == "nvim" ]]
-  then
-    VIM_CONFIG_PATH="$HOME/.config/nvim/init.vim"
-  fi
-
-  echo "Installing vim.plug"
-
-  if [[ "$1" == "vim" ]]
-  then
-    curl -fsSLo ~/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  fi
-
-  if [[ "$1" == "nvim" ]]
-  then
-    curl -fsSLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  fi
-
-  echo "vim.plug installed successfully."
-
-  echo "Creating configuration..."
-  # TODO: check if neovinm in installed.
-  # If it is then:
-  mkdir -p ~/.config/nvim
-
-  curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/vim_config > $VIM_CONFIG_PATH
-
-  echo "Installing plugins..."
-  $1 +"PlugInstall --sync" +qa
-
-  echo "" >> $VIM_CONFIG_PATH
-  echo "syntax on" >> $VIM_CONFIG_PATH
-  echo "colorscheme onedark" >> $VIM_CONFIG_PATH
-  echo "Configuration finished"
-}
-
-if [[ "$0" == "uninstall" ]] || [[ "$1" == "uninstall" ]]
-then
+# Action:
+if [[ "$1" == "uninstall" ]]; then
   uninstall
   exit 0
 fi
 
-if [[ "$0" == "vim" ]] || [[ "$1" == "vim" ]]
-then
-  install_deps "vim"
+EDITOR=${1:-vim}
+
+if [[ "$EDITOR" != "vim" ]] && [[ "$EDITOR" != "nvim" ]] && [[ "$EDITOR" != "neovim" ]]; then
+  EDITOR="vim"
 fi
 
-if [[ "$0" == "nvim" ]] || [[ "$1" == "nvim" ]]
-then
-  install_deps "neovim"
+if [[ "$EDITOR" == "neovim" ]]; then
+  EDITOR="nvim"
 fi
 
-if [[ "$0" == "nvim" ]] || [[ "$1" == "nvim" ]]
-then
-  main "nvim"
+if [[ "$EDITOR" == "nvim" ]]; then
+  SOFTWARE_NAME="neovim"
 else
-  main "vim"
+  SOFTWARE_NAME="vim"
 fi
+
+if [[ "$2" == "--with-deps" ]]; then
+  install_deps $SOFTWARE_NAME
+fi
+
+install $EDITOR
