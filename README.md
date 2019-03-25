@@ -1,5 +1,5 @@
 # Running options
-## Install with NeoVim
+### Install with NeoVim
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/krzyczak/nvim/master/install.sh)" nvim
 ```
