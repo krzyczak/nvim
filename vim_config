@@ -111,4 +111,5 @@ let &colorcolumn="95,".join(range(400,999),",")
 noremap ; :
 
 " escape clears highlight after search
-map <esc> :noh<cr>
+" map <esc> :noh<cr>
+" ^^^ comented out because it breaks vim
