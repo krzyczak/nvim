@@ -6,7 +6,11 @@ set shiftwidth=2
 set expandtab
 set ignorecase
 set smartcase
-set termguicolors
+
+if exists('+termguicolors')
+  set termguicolors
+endif
+
 set scrolloff=5
 
 call plug#begin()
