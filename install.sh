@@ -70,7 +70,7 @@ install_deps () {
       curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage --create-dirs -o $HOME/.bin/nvim
       export PATH=$PATH:$HOME/.bin
       echo "" >> $HOME/.bashrc
-      echo "export PATH=$PATH:$HOME/.bin" >> $HOME/.bashrc
+      grep -q "$HOME/.bin" $HOME/.bashrc || echo "export PATH=$PATH:$HOME/.bin" >> $HOME/.bashrc
       echo "" >> $HOME/.bashrc
       chmod +x $HOME/.bin/nvim
     else
